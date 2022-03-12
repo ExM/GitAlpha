@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -24,7 +25,10 @@ namespace MvvmDemo
                     DataContext = model,
                 };
 
-                desktop.ShutdownRequested += (sender, args) => model.Dispose();
+                desktop.ShutdownRequested += (sender, args) =>
+                {
+                    model.Dispose();
+                };
             }
             
             base.OnFrameworkInitializationCompleted();

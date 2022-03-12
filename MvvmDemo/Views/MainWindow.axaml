@@ -12,6 +12,24 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <StackPanel Orientation="Vertical">
+        <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <ListBox Margin="2"
+                 BorderThickness="1"
+                 Items="{Binding Revisions}"
+                 SelectedIndex="0"
+                 VirtualizationMode="Simple" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Id}" />
+                        <TextBlock Text="{Binding Subject}" />
+                        <TextBlock Text="{Binding CommitDate}" />
+                    </StackPanel>
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
 
 </Window>

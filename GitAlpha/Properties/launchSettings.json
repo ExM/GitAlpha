@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Debug from Rider": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "HOME": "$(USERPROFILE)"
+      }
+    }
+  }
+}
