@@ -6,4 +6,4 @@ nuget Avalonia 0.10.10
 nuget Avalonia.Desktop 0.10.10
 nuget Avalonia.Diagnostics 0.10.10
 nuget Avalonia.ReactiveUI 0.10.10
-nuget LibGit2Sharp 0.26.2
+nuget Microsoft.Toolkit.HighPerformance

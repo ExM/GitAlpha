@@ -21,7 +21,7 @@
                  VirtualizationMode="Simple" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
                         <TextBlock Text="{Binding Id}" />
                         <TextBlock Text="{Binding Subject}" />
                         <TextBlock Text="{Binding CommitDate}" />
