@@ -3,33 +3,40 @@
         xmlns:vm="using:MvvmDemo.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:MvvmDemo.Controls"
+        xmlns:git="clr-namespace:GitAlpha.Git;assembly=GitAlpha"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MvvmDemo.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="MvvmDemo">
 
     <Design.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Design.DataContext>
 
     <StackPanel Orientation="Vertical">
-        <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <ListBox Margin="2"
-                 BorderThickness="1"
-                 Items="{Binding Revisions}"
-                 SelectedIndex="0"
-                 VirtualizationMode="Simple" >
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Spacing="10">
-                        <TextBlock Text="{Binding Id}" />
-                        <TextBlock Text="{Binding Subject}" />
-                        <TextBlock Text="{Binding CommitDate}" />
-                    </StackPanel>
+        <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <controls:GraphRowControl Width="100" Height="100" />
 
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Grid>
+            <DataGrid Name="MyDataGrid" Items="{Binding Revisions}" AutoGenerateColumns="False"
+                      CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserSortColumns="False" GridLinesVisibility="All">
+                <DataGrid.Columns>
+
+                    <DataGridTemplateColumn Header="Node">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="git:Revision">
+                                <controls:GraphRowControl Width="100"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                    <DataGridTextColumn Header="Subject" Binding="{Binding Subject}" />
+                    <DataGridTextColumn Header="CommitDate" Binding="{Binding CommitDate}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </StackPanel>
 
 </Window>

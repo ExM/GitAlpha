@@ -5,7 +5,7 @@ using ReactiveUI;
 
 namespace MvvmDemo.ViewModels
 {
-    public class ViewModelBase : ReactiveObject
-    {
-    }
+	public class ViewModelBase : ReactiveObject
+	{
+	}
 }

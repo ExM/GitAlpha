@@ -9,46 +9,46 @@ using ReactiveUI;
 
 namespace MvvmDemo.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase, IDisposable
-    {
-        private readonly Timer _timer;
-        private string _greeting = "Welcome to Avalonia!";
-        public string Greeting => _greeting;
+	public class MainWindowViewModel : ViewModelBase, IDisposable
+	{
+		private readonly Timer _timer;
+		private string _greeting = "Welcome to Avalonia!";
+		public string Greeting => _greeting;
 
-        public MainWindowViewModel()
-        {
-            _timer = new Timer(OnTimer, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
+		public MainWindowViewModel()
+		{
+			_timer = new Timer(OnTimer, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
 
-            var path = Directory.GetCurrentDirectory();
+			var path = Directory.GetCurrentDirectory();
 
-            while(true)
-            {
-                if (!Directory.Exists(path))
-                    throw new Exception($"directory {path} not exist");
+			while (true)
+			{
+				if (!Directory.Exists(path))
+					throw new Exception($"directory {path} not exist");
 
-                if (Directory.Exists(Path.Combine(path, ".git")))
-                    break;
+				if (Directory.Exists(Path.Combine(path, ".git")))
+					break;
 
-                path = Path.GetDirectoryName(path);
-            }
+				path = Path.GetDirectoryName(path);
+			}
 
-            var repo = new Repository(new DirectoryInfo(path));
+			var repo = new Repository(new DirectoryInfo(path));
 
-            Revisions = repo.GetRevisions();
-        }
+			Revisions = repo.GetRevisions();
+		}
 
-        public IReadOnlyList<Revision> Revisions { get; }
+		public IReadOnlyList<Revision> Revisions { get; }
 
-        private void OnTimer(object? state)
-        {
-            _greeting = $"Welcome to Avalonia! {DateTime.Now:F}";
+		private void OnTimer(object? state)
+		{
+			_greeting = $"Welcome to Avalonia! {DateTime.Now:F}";
 
-            this.RaisePropertyChanged(nameof(Greeting));
-        }
+			this.RaisePropertyChanged(nameof(Greeting));
+		}
 
-        public void Dispose()
-        {
-            _timer.Dispose();
-        }
-    }
+		public void Dispose()
+		{
+			_timer.Dispose();
+		}
+	}
 }

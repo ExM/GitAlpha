@@ -7,31 +7,31 @@ using MvvmDemo.Views;
 
 namespace MvvmDemo
 {
-    public class App : Application
-    {
-        public override void Initialize()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+	public class App : Application
+	{
+		public override void Initialize()
+		{
+			AvaloniaXamlLoader.Load(this);
+		}
 
-        public override void OnFrameworkInitializationCompleted()
-        {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                var model = new MainWindowViewModel();
-                
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = model,
-                };
+		public override void OnFrameworkInitializationCompleted()
+		{
+			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+			{
+				var model = new MainWindowViewModel();
 
-                desktop.ShutdownRequested += (sender, args) =>
-                {
-                    model.Dispose();
-                };
-            }
-            
-            base.OnFrameworkInitializationCompleted();
-        }
-    }
+				desktop.MainWindow = new MainWindow
+				{
+					DataContext = model,
+				};
+
+				desktop.ShutdownRequested += (sender, args) =>
+				{
+					model.Dispose();
+				};
+			}
+
+			base.OnFrameworkInitializationCompleted();
+		}
+	}
 }

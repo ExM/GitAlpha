@@ -2,8 +2,9 @@ source https://api.nuget.org/v3/index.json
 
 storage: none
 framework: net6.0
-nuget Avalonia 0.10.10
-nuget Avalonia.Desktop 0.10.10
-nuget Avalonia.Diagnostics 0.10.10
-nuget Avalonia.ReactiveUI 0.10.10
+nuget Avalonia 0.10.16
+nuget Avalonia.Desktop 0.10.16
+nuget Avalonia.Diagnostics 0.10.16
+nuget Avalonia.ReactiveUI 0.10.16
+nuget Avalonia.Controls.DataGrid 0.10.16
 nuget Microsoft.Toolkit.HighPerformance

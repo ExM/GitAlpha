@@ -44,7 +44,7 @@ public class Repository
 		var exec = new Executable("git", _root.FullName);
 
 		using (var process = exec.Start($"log -z --pretty=format:\"{FullFormat}\"", redirectOutput: true,
-			       outputEncoding: LosslessEncoding))
+				   outputEncoding: LosslessEncoding))
 		{
 			var buffer = new byte[4096];
 
@@ -102,8 +102,8 @@ public class Repository
 
 		// The first 40 bytes are the revision ID and the tree ID back to back
 		if (!ObjectId.TryParseAsciiHexReadOnlySpan(array.Slice(0, ObjectId.Sha1CharCount), out var objectId) ||
-		    !ObjectId.TryParseAsciiHexReadOnlySpan(array.Slice(ObjectId.Sha1CharCount, ObjectId.Sha1CharCount),
-			    out var treeId))
+			!ObjectId.TryParseAsciiHexReadOnlySpan(array.Slice(ObjectId.Sha1CharCount, ObjectId.Sha1CharCount),
+				out var treeId))
 		{
 			ParseAssert(
 				$"Log parse error, object id: {chunk.Count}({array.Slice(0, ObjectId.Sha1CharCount).ToString()}");
@@ -161,7 +161,7 @@ public class Repository
 			for (int parentIndex = 0; parentIndex < noParents; parentIndex++)
 			{
 				if (!ObjectId.TryParseAsciiHexReadOnlySpan(array.Slice(offset, ObjectId.Sha1CharCount),
-					    out ObjectId parentId))
+						out ObjectId parentId))
 				{
 					ParseAssert($"Log parse error, parent {parentIndex} for {objectId}");
 					revision = default;
@@ -251,7 +251,7 @@ public class Repository
 		skipBody = skipBody || !hasMultiLineMessage;
 
 		if (author is null || authorEmail is null || committer is null || committerEmail is null || subject is null ||
-		    (skipBody != (body is null)))
+			(skipBody != (body is null)))
 		{
 			ParseAssert($"Log parse error, decoded fields ({subject}::{body}) for {objectId}");
 			revision = default;

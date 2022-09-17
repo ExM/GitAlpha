@@ -3,7 +3,7 @@ using System.Text;
 
 namespace GitAlpha.CommandExecuting;
 
-public sealed class ProcessWrapper: IDisposable
+public sealed class ProcessWrapper : IDisposable
 {
 	private readonly TaskCompletionSource<int> _exitTaskCompletionSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
 

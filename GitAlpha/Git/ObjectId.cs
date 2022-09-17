@@ -113,13 +113,13 @@ public sealed class ObjectId : IEquatable<ObjectId>, IComparable<ObjectId>
 		uint HexToUInt32(int j)
 		{
 			return (uint)(HexCharToInt(s[j]) << 28 |
-			              HexCharToInt(s[j + 1]) << 24 |
-			              HexCharToInt(s[j + 2]) << 20 |
-			              HexCharToInt(s[j + 3]) << 16 |
-			              HexCharToInt(s[j + 4]) << 12 |
-			              HexCharToInt(s[j + 5]) << 8 |
-			              HexCharToInt(s[j + 6]) << 4 |
-			              HexCharToInt(s[j + 7]));
+						  HexCharToInt(s[j + 1]) << 24 |
+						  HexCharToInt(s[j + 2]) << 20 |
+						  HexCharToInt(s[j + 3]) << 16 |
+						  HexCharToInt(s[j + 4]) << 12 |
+						  HexCharToInt(s[j + 5]) << 8 |
+						  HexCharToInt(s[j + 6]) << 4 |
+						  HexCharToInt(s[j + 7]));
 		}
 
 		int HexCharToInt(char c)
@@ -215,9 +215,9 @@ public sealed class ObjectId : IEquatable<ObjectId>, IComparable<ObjectId>
 		return new ObjectId(Read(), Read(), Read(), Read(), Read());
 
 		uint Read() => (uint)((bytes[index++] << 24) |
-		                      (bytes[index++] << 16) |
-		                      (bytes[index++] << 8) |
-		                      bytes[index++]);
+							  (bytes[index++] << 16) |
+							  (bytes[index++] << 8) |
+							  bytes[index++]);
 	}
 
 	/// <summary>
@@ -312,13 +312,13 @@ public sealed class ObjectId : IEquatable<ObjectId>, IComparable<ObjectId>
 		uint HexAsciiBytesToUInt32(in ReadOnlySpan<byte> array, int j)
 		{
 			return (uint)(HexAsciiByteToInt(array[j]) << 28 |
-			              HexAsciiByteToInt(array[j + 1]) << 24 |
-			              HexAsciiByteToInt(array[j + 2]) << 20 |
-			              HexAsciiByteToInt(array[j + 3]) << 16 |
-			              HexAsciiByteToInt(array[j + 4]) << 12 |
-			              HexAsciiByteToInt(array[j + 5]) << 8 |
-			              HexAsciiByteToInt(array[j + 6]) << 4 |
-			              HexAsciiByteToInt(array[j + 7]));
+						  HexAsciiByteToInt(array[j + 1]) << 24 |
+						  HexAsciiByteToInt(array[j + 2]) << 20 |
+						  HexAsciiByteToInt(array[j + 3]) << 16 |
+						  HexAsciiByteToInt(array[j + 4]) << 12 |
+						  HexAsciiByteToInt(array[j + 5]) << 8 |
+						  HexAsciiByteToInt(array[j + 6]) << 4 |
+						  HexAsciiByteToInt(array[j + 7]));
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -396,10 +396,10 @@ public sealed class ObjectId : IEquatable<ObjectId>, IComparable<ObjectId>
 		var result = 0;
 
 		_ = Compare(_i1, other._i1) ||
-		    Compare(_i2, other._i2) ||
-		    Compare(_i3, other._i3) ||
-		    Compare(_i4, other._i4) ||
-		    Compare(_i5, other._i5);
+			Compare(_i2, other._i2) ||
+			Compare(_i3, other._i3) ||
+			Compare(_i4, other._i4) ||
+			Compare(_i5, other._i5);
 
 		return result;
 
@@ -477,11 +477,11 @@ public sealed class ObjectId : IEquatable<ObjectId>, IComparable<ObjectId>
 	public bool Equals(ObjectId? other)
 	{
 		return other is not null &&
-		       _i1 == other._i1 &&
-		       _i2 == other._i2 &&
-		       _i3 == other._i3 &&
-		       _i4 == other._i4 &&
-		       _i5 == other._i5;
+			   _i1 == other._i1 &&
+			   _i2 == other._i2 &&
+			   _i3 == other._i3 &&
+			   _i4 == other._i4 &&
+			   _i5 == other._i5;
 	}
 
 	/// <summary>
