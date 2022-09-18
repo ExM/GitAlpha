@@ -19,9 +19,11 @@ public class GraphRowControl : Control
 	public override void Render(DrawingContext drawingContext)
 	{
 		var p0 = new Point(0, 0);
-		var pB = new Point(p0.X + Bounds.Width, p0.Y + Bounds.Height);
-
-		drawingContext.DrawLine(new Pen(Brushes.Red, 3, lineCap: PenLineCap.Round), p0, pB);
-		drawingContext.DrawRectangle(new Pen(Brushes.Black), new Rect(p0, pB));
+		//var pB = new Point(p0.X + Bounds.Width, p0.Y + Bounds.Height);
+		//drawingContext.DrawLine(new Pen(Brushes.Red, 3, lineCap: PenLineCap.Round), p0, pB);
+		//drawingContext.DrawRectangle(new Pen(Brushes.Black), new Rect(p0, pB));
+		
+		drawingContext.DrawEllipse(Brushes.Blue, new Pen(Brushes.Red, 1), new Point(p0.X + Bounds.Width/2, p0.Y + Bounds.Height/2), 5, 5);
+		
 	}
 }

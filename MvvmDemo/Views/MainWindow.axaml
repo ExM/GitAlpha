@@ -14,29 +14,32 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <StackPanel Orientation="Vertical">
+	<Grid>
+		<DataGrid Name="MyDataGrid" Items="{Binding Revisions}" AutoGenerateColumns="False"
+		          CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserSortColumns="False" 
+		          GridLinesVisibility="Vertical"
+		          VerticalScrollBarVisibility="Visible">
+
+			<DataGrid.Columns>
+				<DataGridTemplateColumn Header="Node">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate DataType="git:Revision">
+							<controls:GraphRowControl Width="100"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True"/>
+				<DataGridTextColumn Header="Subject" Binding="{Binding Subject}" IsReadOnly="True"/>
+				<DataGridTextColumn Header="CommitDate" Binding="{Binding CommitDate}" IsReadOnly="True"/>
+			</DataGrid.Columns>
+		</DataGrid>
+	</Grid>
+	
+    <!--StackPanel Orientation="Vertical">
         <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center" />
         <controls:GraphRowControl Width="100" Height="100" />
-
-        <Grid>
-            <DataGrid Name="MyDataGrid" Items="{Binding Revisions}" AutoGenerateColumns="False"
-                      CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserSortColumns="False" GridLinesVisibility="All">
-                <DataGrid.Columns>
-
-                    <DataGridTemplateColumn Header="Node">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate DataType="git:Revision">
-                                <controls:GraphRowControl Width="100"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
-                    <DataGridTextColumn Header="Subject" Binding="{Binding Subject}" />
-                    <DataGridTextColumn Header="CommitDate" Binding="{Binding CommitDate}" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
-    </StackPanel>
+        
+    </StackPanel-->
 
 </Window>

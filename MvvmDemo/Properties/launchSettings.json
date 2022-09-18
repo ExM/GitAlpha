@@ -1,0 +1,18 @@
+﻿{
+	"profiles": {
+		"gitextensions": {
+			"commandName": "Project",
+			"workingDirectory": "../../../../../gitextensions/",
+			"environmentVariables": {
+				"HOME": "$(USERPROFILE)"
+			}
+		},
+		"NMoney": {
+			"commandName": "Project",
+			"workingDirectory": "../../../../../../NMoney/",
+			"environmentVariables": {
+				"HOME": "$(USERPROFILE)"
+			}
+		}
+	}
+}
