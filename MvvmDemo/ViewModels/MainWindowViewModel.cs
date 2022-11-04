@@ -59,8 +59,17 @@ namespace MvvmDemo.ViewModels
 				else
 				{
 					var transite = new List<ObjectId>(prevRow.Transite);
-					transite.AddRange(prevRow.ParentIds);
-					transite.Remove(nextRow.Id);
+
+					foreach (var id in prevRow.ParentIds)
+					{
+						if(!transite.Contains(id))
+							transite.Add(id);
+					}
+
+					var foundIndex = transite.FindIndex(item => item == nextRow.Id);
+					if(foundIndex != -1)
+						transite.RemoveAt(foundIndex);
+					
 					nextRow.Transite = transite;
 				}
 				

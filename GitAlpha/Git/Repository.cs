@@ -43,7 +43,7 @@ public class Repository
 		var result = new List<GitRevision>();
 		var exec = new Executable("git", _root.FullName);
 
-		using (var process = exec.Start($"log -z --pretty=format:\"{FullFormat}\"", redirectOutput: true,
+		using (var process = exec.Start($"log --all -z --pretty=format:\"{FullFormat}\"", redirectOutput: true,
 				   outputEncoding: LosslessEncoding))
 		{
 			var buffer = new byte[4096];
