@@ -9,7 +9,7 @@
 		},
 		"NMoney": {
 			"commandName": "Project",
-			"workingDirectory": "../../../../../NMoney/",
+			"workingDirectory": "../../../../../../NMoney/",
 			"environmentVariables": {
 				"HOME": "$(USERPROFILE)"
 			}

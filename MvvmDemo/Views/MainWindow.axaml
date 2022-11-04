@@ -21,15 +21,16 @@
 		          VerticalScrollBarVisibility="Visible">
 
 			<DataGrid.Columns>
-				<DataGridTemplateColumn Header="Node">
+				<DataGridTemplateColumn Header="Node" IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate DataType="git:Revision">
-							<controls:GraphRowControl Width="100"/>
+						<DataTemplate DataType="git:RevisionRow">
+							<controls:GraphRowControl Width="100" RevisionRow="{Binding .}"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True"/>
+				<!-- WTF reading a field resets the contents of the model -->
+				<!--DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True"/--> 
 				<DataGridTextColumn Header="Subject" Binding="{Binding Subject}" IsReadOnly="True"/>
 				<DataGridTextColumn Header="CommitDate" Binding="{Binding CommitDate}" IsReadOnly="True"/>
 			</DataGrid.Columns>

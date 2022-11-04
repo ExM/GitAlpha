@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using GitAlpha.Git;
@@ -34,10 +35,43 @@ namespace MvvmDemo.ViewModels
 
 			var repo = new Repository(new DirectoryInfo(path));
 
-			Revisions = repo.GetRevisions();
+			var result = new List<RevisionRow>();
+
+			var gitRevs = repo.GetRevisions();
+
+			RevisionRow? prevRow = null;
+			
+			foreach (var revision in gitRevs)
+			{
+				var nextRow = new RevisionRow()
+				{
+					Id = revision.ObjectId,
+					ParentIds = revision.ParentIds!,
+					Author = revision.Author,
+					Subject = revision.Subject,
+					CommitDate = revision.CommitDate
+				};
+
+				if (prevRow is null)
+				{
+					nextRow.Transite = new List<ObjectId>();
+				}
+				else
+				{
+					var transite = new List<ObjectId>(prevRow.Transite);
+					transite.AddRange(prevRow.ParentIds);
+					transite.Remove(nextRow.Id);
+					nextRow.Transite = transite;
+				}
+				
+				result.Add(nextRow);
+				prevRow = nextRow;
+			}
+
+			Revisions = result;
 		}
 
-		public IReadOnlyList<Revision> Revisions { get; }
+		public IReadOnlyList<RevisionRow> Revisions { get; }
 
 		private void OnTimer(object? state)
 		{

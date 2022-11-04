@@ -38,9 +38,9 @@ public class Repository
 
 	public Encoding CommitEncoding = new UTF8Encoding(false);
 
-	public IReadOnlyList<Revision> GetRevisions()
+	public IReadOnlyList<GitRevision> GetRevisions()
 	{
-		var result = new List<Revision>();
+		var result = new List<GitRevision>();
 		var exec = new Executable("git", _root.FullName);
 
 		using (var process = exec.Start($"log -z --pretty=format:\"{FullFormat}\"", redirectOutput: true,
@@ -52,13 +52,7 @@ public class Repository
 			{
 				if (TryParseRevision(chunk, CommitEncoding, out var revision))
 				{
-					result.Add(new Revision()
-					{
-						Id = revision.ObjectId.ToString(),
-						Author = revision.Author,
-						Subject = revision.Subject,
-						CommitDate = revision.CommitDate
-					});
+					result.Add(revision);
 				}
 			}
 		}

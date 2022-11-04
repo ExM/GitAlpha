@@ -4,10 +4,12 @@ using System.Text.RegularExpressions;
 
 namespace GitAlpha.Git
 {
-	public sealed class Revision
+	public sealed class RevisionRow
 	{
-		public string Id { get; set; }
-		public IReadOnlyList<string> ParentIds { get; set; }
+		public ObjectId Id { get; set; }
+		public IReadOnlyList<ObjectId> ParentIds { get; set; }
+		
+		public IList<ObjectId> Transite { get; set; }
 
 		public string? Author { get; set; }
 		public string? AuthorEmail { get; set; }
