@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using Avalonia.Threading;
 using GitAlpha.Git;
 
@@ -35,6 +37,10 @@ public class GraphRowControl : Control
 			o => o.RevisionRow,
 			(o, v) => o.RevisionRow = v);
 
+	public int LeftMargin { get; set; } = 8;
+	
+	public int NodeInterval { get; set; } = 10;
+
 	public override void Render(DrawingContext drawingContext)
 	{
 		if (_revisionRow is null)
@@ -42,40 +48,82 @@ public class GraphRowControl : Control
 		
 		var p0 = new Point(0, 0);
 		//var pB = new Point(p0.X + Bounds.Width, p0.Y + Bounds.Height);
-		//drawingContext.DrawLine(new Pen(Brushes.Red, 3, lineCap: PenLineCap.Round), p0, pB);
-		//drawingContext.DrawRectangle(new Pen(Brushes.Black), new Rect(p0, pB));
 
-		
+		var transitUp = Bounds.Height / 4;
+		var transitDown = Bounds.Height / 4 * 3;
+		var halfHeight = Bounds.Height / 2;
 
-		var offset = 8;
+		var offset = LeftMargin;
 
-		foreach (var id in _revisionRow.Transite)
+		foreach (var id in _revisionRow.Render)
 		{
 			var brush = GetBrush(id);
-			drawingContext.DrawLine(new Pen(brush, 3), new Point(offset, 0), new Point(offset, Bounds.Height));
-			offset += 10;
+
+			if (id == _revisionRow.Id)
+			{
+				drawingContext.DrawEllipse(brush, new Pen(brush, 0), new Point(offset, p0.Y + Bounds.Height/2), 5, 5);
+			}
+			else
+			{
+				drawingContext.DrawLine(new Pen(brush, 2), new Point(offset, transitUp), new Point(offset, transitDown));
+			}
+			offset += NodeInterval;
 		}
 
-		
-		var brushId = GetBrush(_revisionRow.Id);
+		foreach (var mergeTransit in _revisionRow.MergeTransitRender)
+		{
+			var brush = GetBrush(_revisionRow.Render[mergeTransit.TransitIndex]);
+			var transitX = NodeInterval * mergeTransit.TransitIndex + LeftMargin;
+			var nodeX = NodeInterval * mergeTransit.NodeIndex + LeftMargin;
+			
+			if (mergeTransit.TransitIndex < mergeTransit.NodeIndex)
+			{ // left merge
+				drawingContext.DrawLine(new Pen(brush, 2), new Point(transitX, transitDown), new Point(transitX + NodeInterval/2, halfHeight));
+				drawingContext.DrawLine(new Pen(brush, 2), new Point(transitX + NodeInterval/2, halfHeight), new Point(nodeX, halfHeight));
+			}
+			else
+			{  // right merge
+				drawingContext.DrawLine(new Pen(brush, 2), new Point(transitX, transitDown), new Point(transitX - NodeInterval/2, halfHeight));
+				drawingContext.DrawLine(new Pen(brush, 2), new Point(transitX - NodeInterval/2, halfHeight), new Point(nodeX, halfHeight));
+			}
+		}
 
-		drawingContext.DrawEllipse(brushId, new Pen(Brushes.Red, 1), new Point(offset, p0.Y + Bounds.Height/2), 5, 5);
+		foreach (var conn in _revisionRow.ConnectionsRender)
+		{
+			var brush = GetBrush(conn.ConnId);
+			var baseX = LeftMargin + NodeInterval * conn.Index;
+			var targetX = baseX + conn.Delta * NodeInterval / 2;
+			
+			if (conn.Up)
+			{
+				drawingContext.DrawLine(new Pen(brush, 2), new Point(baseX, transitUp), new Point(targetX, 0));
+			}
+			else
+			{
+				drawingContext.DrawLine(new Pen(brush, 2), new Point(baseX, transitDown), new Point(targetX, Bounds.Height));
+			}
+		}
 	}
 
 	private static ISolidColorBrush GetBrush(ObjectId id)
 	{
 		return _brushes[Math.Abs(id.GetHashCode()) % _brushes.Count];
 	}
-
-	private static readonly IList<ISolidColorBrush> _brushes = new List<ISolidColorBrush>()
+	
+	private static readonly IList<Color> _colorPreset = new List<Color>()
 	{
-		Brushes.Blue,
-		Brushes.Red,
-		Brushes.Green,
-		Brushes.Black,
-		Brushes.Cyan,
-		Brushes.Magenta
+		Color.FromRgb(240, 100, 160), // red-pink
+		Color.FromRgb(120, 180, 230), // light blue
+		Color.FromRgb(36, 194, 33), // green
+		Color.FromRgb(160, 120, 240), // light violet
+		Color.FromRgb(221, 50, 40), // red
+		Color.FromRgb(26, 198, 166), // cyan-green
+		Color.FromRgb(231, 176, 15) // orange
 	};
+	
+	private static readonly IList<ISolidColorBrush> _brushes =
+		_colorPreset.Select(color => (ISolidColorBrush)new ImmutableSolidColorBrush(color)).ToList();
+
 
 	private RevisionRow? _revisionRow;
 }

@@ -9,8 +9,13 @@ namespace GitAlpha.Git
 		public ObjectId Id { get; set; }
 		public IReadOnlyList<ObjectId> ParentIds { get; set; }
 		
-		public IList<ObjectId> Transite { get; set; }
+		public IList<ObjectId> Transit { get; set; }
+		
+		public List<ObjectId> Render { get; set; }
 
+		public List<MergeTransit> MergeTransitRender { get; set; } = new List<MergeTransit>();
+		public List<Connections> ConnectionsRender { get; set; } = new List<Connections>();
+		
 		public string? Author { get; set; }
 		public string? AuthorEmail { get; set; }
 
@@ -20,5 +25,33 @@ namespace GitAlpha.Git
 		public DateTime CommitDate { get; set; }
 
 		public string Subject { get; set; } = "";
+
+		public sealed class MergeTransit
+		{
+			public MergeTransit(int transitIndex, int nodeIndex)
+			{
+				TransitIndex = transitIndex;
+				NodeIndex = nodeIndex;
+			}
+
+			public int TransitIndex { get; }
+			public int NodeIndex { get; }
+		}
+		
+		public sealed class Connections
+		{
+			public int Index { get; }
+			public int Delta { get; }
+			public ObjectId ConnId { get; }
+			public bool Up { get; }
+
+			public Connections(int index, int delta, ObjectId connId, bool up)
+			{
+				Index = index;
+				Delta = delta;
+				ConnId = connId;
+				Up = up;
+			}
+		}
 	}
 }

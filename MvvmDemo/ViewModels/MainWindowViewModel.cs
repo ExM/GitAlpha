@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using DynamicData;
 using GitAlpha.Git;
 using ReactiveUI;
 
@@ -54,27 +55,114 @@ namespace MvvmDemo.ViewModels
 
 				if (prevRow is null)
 				{
-					nextRow.Transite = new List<ObjectId>();
+					nextRow.Transit = new List<ObjectId>();
 				}
 				else
 				{
-					var transite = new List<ObjectId>(prevRow.Transite);
+					var transit = new List<ObjectId>(prevRow.Transit);
 
 					foreach (var id in prevRow.ParentIds)
 					{
-						if(!transite.Contains(id))
-							transite.Add(id);
+						if(!transit.Contains(id))
+							transit.Add(id);
 					}
 
-					var foundIndex = transite.FindIndex(item => item == nextRow.Id);
+					var foundIndex = transit.FindIndex(item => item == nextRow.Id);
 					if(foundIndex != -1)
-						transite.RemoveAt(foundIndex);
+						transit.RemoveAt(foundIndex);
 					
-					nextRow.Transite = transite;
+					nextRow.Transit = transit;
 				}
 				
 				result.Add(nextRow);
 				prevRow = nextRow;
+			}
+
+			var first = result.FirstOrDefault();
+			if (first is not null)
+			{
+				first.Render = new List<ObjectId>() { first.Id };
+			}
+
+			foreach (var pair in result.Zip(result.Skip(1), (a, b) => new {a, b}))
+			{
+				var uRow = pair.a;
+				var dRow = pair.b;
+
+				var render = new List<ObjectId>(dRow.Transit);
+
+				var transitIndex = uRow.Render.IndexOf(dRow.Id);
+				if (transitIndex != -1)
+				{
+					if(transitIndex < render.Count)
+						render.Insert(transitIndex, dRow.Id);
+					else
+					{
+						render.Add(dRow.Id); 
+					}
+				}
+				else
+				{
+					if (uRow.ParentIds.Contains(dRow.Id))
+					{
+						var uNodeIndex = uRow.Render.IndexOf(uRow.Id);
+						// if (uNodeIndex != -1) always true
+						if (uNodeIndex < render.Count)
+							render.Insert(uNodeIndex, dRow.Id);
+						else
+						{
+							render.Add(dRow.Id);
+						}
+					}
+					else
+					{
+						render.Add(dRow.Id);
+					}
+				}
+
+				dRow.Render = render;
+
+				var connect = new List<Tuple<int, int, ObjectId>>();
+
+				for(var uIdx = 0; uIdx < uRow.Render.Count; uIdx++)
+				{
+					var uId = uRow.Render[uIdx];
+					if(uId == uRow.Id)
+					{ // node & merge connections
+						foreach (var pId in uRow.ParentIds)
+						{
+							var dIdx = dRow.Render.IndexOf(pId);
+							if (dIdx != -1)
+							{
+								connect.Add(Tuple.Create(uIdx, dIdx, pId));
+							}
+						}
+					}
+					else
+					{ // transit connections
+						var dIdx = dRow.Render.IndexOf(uId);
+						if (dIdx != -1)
+						{
+							connect.Add(Tuple.Create(uIdx, dIdx, uId));
+						}
+					}
+				}
+				
+				foreach (var (uIdx, dIdx, connId) in connect)
+				{
+					uRow.ConnectionsRender.Add(new RevisionRow.Connections(uIdx, dIdx - uIdx, connId, false));
+					dRow.ConnectionsRender.Add(new RevisionRow.Connections(dIdx, uIdx - dIdx, connId, true));
+				}
+				
+				var nodeIndex = dRow.Render.IndexOf(dRow.Id);
+				foreach (var (id, idx) in dRow.Render.Select((id, idx) => Tuple.Create(id, idx)))
+				{
+					if (dRow.ParentIds.Contains(id))
+					{
+						if(!connect.Any(tuple => tuple.Item3 == id)) // remove merge if connection already exists 
+							dRow.MergeTransitRender.Add(new RevisionRow.MergeTransit(idx, nodeIndex));
+					}
+				}
 			}
 
 			Revisions = result;

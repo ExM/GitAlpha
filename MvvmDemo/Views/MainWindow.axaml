@@ -24,7 +24,7 @@
 				<DataGridTemplateColumn Header="Node" IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="git:RevisionRow">
-							<controls:GraphRowControl Width="100" RevisionRow="{Binding .}"/>
+							<controls:GraphRowControl MinWidth="50" RevisionRow="{Binding .}"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
