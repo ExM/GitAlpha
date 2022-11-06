@@ -9,8 +9,6 @@ namespace GitAlpha.Git
 		public ObjectId Id { get; set; }
 		public IReadOnlyList<ObjectId> ParentIds { get; set; }
 		
-		public IList<ObjectId> Transit { get; set; }
-		
 		public List<ObjectId> Render { get; set; }
 
 		public List<MergeTransit> MergeTransitRender { get; set; } = new List<MergeTransit>();
@@ -28,14 +26,16 @@ namespace GitAlpha.Git
 
 		public sealed class MergeTransit
 		{
-			public MergeTransit(int transitIndex, int nodeIndex)
+			public MergeTransit(int transitIndex, int nodeIndex, ObjectId parentId)
 			{
 				TransitIndex = transitIndex;
 				NodeIndex = nodeIndex;
+				ParentId = parentId;
 			}
 
 			public int TransitIndex { get; }
 			public int NodeIndex { get; }
+			public ObjectId ParentId { get; }
 		}
 		
 		public sealed class Connections

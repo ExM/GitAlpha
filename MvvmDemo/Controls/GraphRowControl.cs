@@ -28,9 +28,6 @@ public class GraphRowControl : Control
 		set => _revisionRow = value;
 	}
 
-	/// <summary>
-	/// Defines the <see cref="Text"/> property.
-	/// </summary>
 	public static readonly DirectProperty<GraphRowControl, RevisionRow?> RevisionRowProperty =
 		AvaloniaProperty.RegisterDirect<GraphRowControl, RevisionRow?>(
 			nameof(RevisionRow),
@@ -40,18 +37,17 @@ public class GraphRowControl : Control
 	public int LeftMargin { get; set; } = 8;
 	
 	public int NodeInterval { get; set; } = 10;
+	
+	public double NodeSize { get; set; } = 5;
 
 	public override void Render(DrawingContext drawingContext)
 	{
 		if (_revisionRow is null)
 			return;
-		
-		var p0 = new Point(0, 0);
-		//var pB = new Point(p0.X + Bounds.Width, p0.Y + Bounds.Height);
 
-		var transitUp = Bounds.Height / 4;
-		var transitDown = Bounds.Height / 4 * 3;
 		var halfHeight = Bounds.Height / 2;
+		var transitUp = halfHeight - NodeSize / 2 - 4 ;
+		var transitDown = halfHeight + NodeSize / 2 + 4;
 
 		var offset = LeftMargin;
 
@@ -61,7 +57,7 @@ public class GraphRowControl : Control
 
 			if (id == _revisionRow.Id)
 			{
-				drawingContext.DrawEllipse(brush, new Pen(brush, 0), new Point(offset, p0.Y + Bounds.Height/2), 5, 5);
+				drawingContext.DrawEllipse(brush, null, new Point(offset, halfHeight), NodeSize, NodeSize);
 			}
 			else
 			{
@@ -72,19 +68,19 @@ public class GraphRowControl : Control
 
 		foreach (var mergeTransit in _revisionRow.MergeTransitRender)
 		{
-			var brush = GetBrush(_revisionRow.Render[mergeTransit.TransitIndex]);
+			var brush = GetBrush(mergeTransit.ParentId);
 			var transitX = NodeInterval * mergeTransit.TransitIndex + LeftMargin;
 			var nodeX = NodeInterval * mergeTransit.NodeIndex + LeftMargin;
 			
 			if (mergeTransit.TransitIndex < mergeTransit.NodeIndex)
 			{ // left merge
 				drawingContext.DrawLine(new Pen(brush, 2), new Point(transitX, transitDown), new Point(transitX + NodeInterval/2, halfHeight));
-				drawingContext.DrawLine(new Pen(brush, 2), new Point(transitX + NodeInterval/2, halfHeight), new Point(nodeX, halfHeight));
+				drawingContext.DrawLine(new Pen(brush, 2), new Point(transitX + NodeInterval/2, halfHeight), new Point(nodeX - NodeSize - 1, halfHeight));
 			}
 			else
 			{  // right merge
 				drawingContext.DrawLine(new Pen(brush, 2), new Point(transitX, transitDown), new Point(transitX - NodeInterval/2, halfHeight));
-				drawingContext.DrawLine(new Pen(brush, 2), new Point(transitX - NodeInterval/2, halfHeight), new Point(nodeX, halfHeight));
+				drawingContext.DrawLine(new Pen(brush, 2), new Point(transitX - NodeInterval/2, halfHeight), new Point(nodeX + NodeSize + 1, halfHeight));
 			}
 		}
 
