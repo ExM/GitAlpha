@@ -65,13 +65,10 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 			render.RemoveAt(uNodeIndex);
 
 			var missingParents = uRow.ParentIds.Where(parentId => !render.Contains(parentId)).ToList();
-
-			bool foundParentNode = missingParents.Remove(dRow.Id);
+			if (missingParents.Remove(dRow.Id))
+				render.InsertOrAdd(uNodeIndex, dRow.Id);
 			foreach (var parentId in missingParents)
 				render.InsertOrAdd(uNodeIndex, parentId);
-
-			if (foundParentNode)
-				render.InsertOrAdd(uNodeIndex, dRow.Id);
 
 			if (!render.Contains(dRow.Id))
 			{
@@ -87,13 +84,6 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 			}
 
 			dRow.Render = render;
-			
-			var nodeIndex = dRow.Render.IndexOf(dRow.Id);
-			foreach (var (id, idx) in dRow.Render.Select((id, idx) => Tuple.Create(id, idx)))
-			{
-				if (dRow.ParentIds.Contains(id))
-					dRow.MergeTransitRender.Add(new RevisionRow.MergeTransit(idx, nodeIndex, id));
-			}
 
 			var connect = new List<NodeConnection>();
 
@@ -101,25 +91,13 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 			{
 				var uId = uRow.Render[uIdx];
 				if(uId == uRow.Id)
-				{ // node & merge connections
+				{ // parent connections
 					foreach (var pId in uRow.ParentIds)
 					{
 						var dIdx = dRow.Render.IndexOf(pId);
 						if (dIdx != -1)
 						{
-							var mergeTransitIndex =
-								uRow.MergeTransitRender.FindIndex(mT => mT.ParentId == pId);
-							
-							if (mergeTransitIndex != -1)
-							{
-								if (Math.Abs(uIdx - dIdx) <= 2)
-								{
-									uRow.MergeTransitRender.RemoveAt(mergeTransitIndex);
-									connect.Add(new NodeConnection(pId, uIdx, dIdx));
-								}
-							}
-							else
-								connect.Add(new NodeConnection(pId, uIdx, dIdx));
+							connect.Add(new NodeConnection(pId, uIdx, dIdx));
 						}
 					}
 				}
@@ -135,8 +113,8 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
 			foreach (var (connId, uIdx, dIdx) in connect)
 			{
-				uRow.ConnectionsRender.Add(new RevisionRow.Connections(uIdx, dIdx - uIdx, connId, false));
-				dRow.ConnectionsRender.Add(new RevisionRow.Connections(dIdx, uIdx - dIdx, connId, true));
+				uRow.ConnectionsRender.Add(new RevisionRow.Connections(){ Index = uIdx, Delta = dIdx - uIdx, ConnId = connId, Up = false});
+				dRow.ConnectionsRender.Add(new RevisionRow.Connections(){ Index = dIdx, Delta = uIdx - dIdx, ConnId = connId, Up = true});
 			}
 		}
 

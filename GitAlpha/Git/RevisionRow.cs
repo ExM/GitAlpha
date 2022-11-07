@@ -11,7 +11,6 @@ namespace GitAlpha.Git
 		
 		public List<ObjectId> Render { get; set; }
 
-		public List<MergeTransit> MergeTransitRender { get; set; } = new List<MergeTransit>();
 		public List<Connections> ConnectionsRender { get; set; } = new List<Connections>();
 		
 		public string? Author { get; set; }
@@ -23,35 +22,13 @@ namespace GitAlpha.Git
 		public DateTime CommitDate { get; set; }
 
 		public string Subject { get; set; } = "";
-
-		public sealed class MergeTransit
-		{
-			public MergeTransit(int transitIndex, int nodeIndex, ObjectId parentId)
-			{
-				TransitIndex = transitIndex;
-				NodeIndex = nodeIndex;
-				ParentId = parentId;
-			}
-
-			public int TransitIndex { get; }
-			public int NodeIndex { get; }
-			public ObjectId ParentId { get; }
-		}
 		
-		public sealed class Connections
+		public record struct Connections
 		{
-			public int Index { get; }
-			public int Delta { get; }
-			public ObjectId ConnId { get; }
-			public bool Up { get; }
-
-			public Connections(int index, int delta, ObjectId connId, bool up)
-			{
-				Index = index;
-				Delta = delta;
-				ConnId = connId;
-				Up = up;
-			}
+			public int Index { get; init; }
+			public int Delta { get; init; }
+			public ObjectId ConnId { get; init; }
+			public bool Up { get; init; }
 		}
 	}
 }
