@@ -22,17 +22,17 @@ public class GraphRowControl : Control
 	{
 	}
 
-	public RevisionRow? RevisionRow
+	public RevisionGraphRow? GraphRow
 	{
 		get => _revisionRow;
 		set => _revisionRow = value;
 	}
 
-	public static readonly DirectProperty<GraphRowControl, RevisionRow?> RevisionRowProperty =
-		AvaloniaProperty.RegisterDirect<GraphRowControl, RevisionRow?>(
+	public static readonly DirectProperty<GraphRowControl, RevisionGraphRow?> GraphRowProperty =
+		AvaloniaProperty.RegisterDirect<GraphRowControl, RevisionGraphRow?>(
 			nameof(RevisionRow),
-			o => o.RevisionRow,
-			(o, v) => o.RevisionRow = v);
+			o => o.GraphRow,
+			(o, v) => o.GraphRow = v);
 
 	public int LeftMargin { get; set; } = 8;
 	
@@ -67,7 +67,7 @@ public class GraphRowControl : Control
 								new BezierSegment
 								{
 									Point1 = new Point(baseX, halfHeight),
-									Point2 = new Point(baseX, halfHeight / 2),
+									Point2 = new Point(baseX, halfHeight / 4),
 									Point3 = new Point(targetX, 0)
 								},
 							},
@@ -91,7 +91,7 @@ public class GraphRowControl : Control
 								new BezierSegment
 								{
 									Point1 = new Point(baseX, halfHeight),
-									Point2 = new Point(baseX, halfHeight + halfHeight / 2),
+									Point2 = new Point(baseX, Bounds.Height - halfHeight / 4),
 									Point3 = new Point(targetX, Bounds.Height)
 								},
 							},
@@ -136,5 +136,5 @@ public class GraphRowControl : Control
 	private static readonly IList<Pen> _pens =
 		_brushes.Select(brush => new Pen(brush, 2, null, PenLineCap.Round)).ToList();
 
-	private RevisionRow? _revisionRow;
+	private RevisionGraphRow? _revisionRow;
 }
