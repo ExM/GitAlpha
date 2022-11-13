@@ -49,7 +49,7 @@ public class GraphRowControl : Control
 
 		foreach (var conn in _revisionRow.ConnectionsRender)
 		{
-			var pen = GetPen(conn.ConnId);
+			var pen = GetPen(conn.ColorId);
 			var baseX = LeftMargin + NodeInterval * conn.Index;
 			var targetX = baseX + conn.Delta * NodeInterval / 2;
 			
@@ -103,21 +103,20 @@ public class GraphRowControl : Control
 			}
 		}
 
-		var nodeBrush = GetBrush(_revisionRow.Id);
-		var nodeIndex = _revisionRow.Render.IndexOf(_revisionRow.Id);
+		var nodeBrush = GetBrush(_revisionRow.ColorId);
 		
 		drawingContext.DrawEllipse(nodeBrush, null, new Point(
-			LeftMargin + nodeIndex * NodeInterval, halfHeight), NodeSize, NodeSize);
-	}
-
-	private static ISolidColorBrush GetBrush(ObjectId id)
-	{
-		return _brushes[Math.Abs(id.GetHashCode()) % _brushes.Count];
+			LeftMargin + _revisionRow.NodeIndex * NodeInterval, halfHeight), NodeSize, NodeSize);
 	}
 	
-	private static Pen GetPen(ObjectId id)
+	private static ISolidColorBrush GetBrush(int colorId)
 	{
-		return _pens[Math.Abs(id.GetHashCode()) % _brushes.Count];
+		return _brushes[colorId % _brushes.Count];
+	}
+	
+	private static Pen GetPen(int colorId)
+	{
+		return _pens[colorId % _brushes.Count];
 	}
 	
 	private static readonly IList<Color> _colorPreset = new List<Color>()

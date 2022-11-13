@@ -10,6 +10,8 @@ namespace GitAlpha.Git
 		public IReadOnlyList<ObjectId> ParentIds { get; set; }
 		
 		public List<ObjectId> Render { get; set; }
+		
+		public int ColorId { get; set; }
 
 		public List<Connections> ConnectionsRender { get; set; } = new List<Connections>();
 		
@@ -22,13 +24,14 @@ namespace GitAlpha.Git
 		public DateTime CommitDate { get; set; }
 
 		public string Subject { get; set; } = "";
-		
+		public int NodeIndex { get; set; }
+
 		public record struct Connections
 		{
 			public int Index { get; init; }
 			public int Delta { get; init; }
-			public ObjectId ConnId { get; init; }
 			public bool Up { get; init; }
+			public int ColorId { get; init; }
 		}
 	}
 }

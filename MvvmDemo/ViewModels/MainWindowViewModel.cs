@@ -49,10 +49,17 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 			})
 			.ToList();
 
+		var currentColorId = 0;
+		var colorMap = new Dictionary<ObjectId, int>();
+		
 		var first = result.FirstOrDefault();
 		if (first is not null)
 		{
+			first.NodeIndex = 0;
 			first.Render = new List<ObjectId>() { first.Id };
+			first.ColorId = currentColorId;
+			colorMap.Add(first.Id, currentColorId);
+			currentColorId++;
 		}
 
 		foreach (var pair in result.Zip(result.Skip(1), (a, b) => new {a, b}))
@@ -60,6 +67,24 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 			var uRow = pair.a;
 			var dRow = pair.b;
 
+			if (uRow.ParentIds.Count == 1)
+			{
+				var parentId = uRow.ParentIds[0];
+				if(!colorMap.ContainsKey(parentId))
+					colorMap.Add(parentId, uRow.ColorId);
+			}
+			else
+			{
+				foreach (var parentId in uRow.ParentIds)
+				{
+					if (!colorMap.ContainsKey(parentId))
+					{
+						colorMap.Add(parentId, currentColorId);
+						currentColorId++;
+					}
+				}
+			}
+			
 			var uNodeIndex = uRow.Render.IndexOf(uRow.Id); // always exists
 			var render = new List<ObjectId>(uRow.Render);
 			render.RemoveAt(uNodeIndex);
@@ -83,8 +108,19 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 				}
 			}
 
+			dRow.NodeIndex =  render.IndexOf(dRow.Id);
 			dRow.Render = render;
-
+			if (colorMap.TryGetValue(dRow.Id, out var existColorId))
+			{
+				dRow.ColorId = existColorId;
+			}
+			else
+			{
+				dRow.ColorId = currentColorId;
+				colorMap.Add(dRow.Id, currentColorId);
+				currentColorId++;
+			}
+	
 			var connect = new List<NodeConnection>();
 
 			for(var uIdx = 0; uIdx < uRow.Render.Count; uIdx++)
@@ -97,7 +133,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 						var dIdx = dRow.Render.IndexOf(pId);
 						if (dIdx != -1)
 						{
-							connect.Add(new NodeConnection(pId, uIdx, dIdx));
+							connect.Add(new NodeConnection(colorMap[pId], uIdx, dIdx));
 						}
 					}
 				}
@@ -106,22 +142,22 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 					var dIdx = dRow.Render.IndexOf(uId);
 					if (dIdx != -1)
 					{
-						connect.Add(new NodeConnection(uId, uIdx, dIdx));
+						connect.Add(new NodeConnection(colorMap[uId], uIdx, dIdx));
 					}
 				}
 			}
 
-			foreach (var (connId, uIdx, dIdx) in connect)
+			foreach (var (colorId, uIdx, dIdx) in connect)
 			{
-				uRow.ConnectionsRender.Add(new RevisionRow.Connections(){ Index = uIdx, Delta = dIdx - uIdx, ConnId = connId, Up = false});
-				dRow.ConnectionsRender.Add(new RevisionRow.Connections(){ Index = dIdx, Delta = uIdx - dIdx, ConnId = connId, Up = true});
+				uRow.ConnectionsRender.Add(new RevisionRow.Connections(){ Index = uIdx, Delta = dIdx - uIdx, ColorId = colorId, Up = false});
+				dRow.ConnectionsRender.Add(new RevisionRow.Connections(){ Index = dIdx, Delta = uIdx - dIdx, ColorId = colorId, Up = true});
 			}
 		}
 
 		Revisions = result;
 	}
 
-	private record NodeConnection(ObjectId Id, int UpIndex, int DownIndex);
+	private record NodeConnection(int ColorId, int UpIndex, int DownIndex);
 
 	public IReadOnlyList<RevisionRow> Revisions { get; }
 

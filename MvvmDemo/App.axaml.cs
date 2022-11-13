@@ -2,6 +2,7 @@ using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using MvvmDemo.Styles.Themes;
 using MvvmDemo.ViewModels;
 using MvvmDemo.Views;
 
@@ -12,6 +13,8 @@ namespace MvvmDemo
 		public override void Initialize()
 		{
 			AvaloniaXamlLoader.Load(this);
+			
+			Styles.Add(new DefaultTheme());
 		}
 
 		public override void OnFrameworkInitializationCompleted()

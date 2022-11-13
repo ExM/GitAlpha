@@ -1,0 +1,11 @@
+<Style
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    x:Class="MvvmDemo.Styles.Themes.DefaultTheme">
+
+    <Style.Resources>
+	    
+    </Style.Resources>
+
+</Style>
