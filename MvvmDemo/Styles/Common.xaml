@@ -8,8 +8,9 @@
         <Setter Property="RowHeight" Value="26" />
     </Style>
 	  <Style Selector="DataGridCell">
-		  <Setter Property="MinHeight" Value="26" />
-		  <Setter Property="MaxHeight" Value="26" />
+		  <!--Setter Property="Height" Value="26" /-->
+		  <Setter Property="MinHeight" Value="10" />
+		  <!--Setter Property="MaxHeight" Value="26" /-->
 	  </Style>
 	  
 </Styles>

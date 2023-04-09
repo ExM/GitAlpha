@@ -21,6 +21,7 @@
 		          VerticalScrollBarVisibility="Visible">
 
 			<DataGrid.Columns>
+				
 				<DataGridTemplateColumn Header="Node" IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="git:RevisionRow">
