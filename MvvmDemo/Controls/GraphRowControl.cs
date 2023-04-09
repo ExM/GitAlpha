@@ -44,7 +44,7 @@ public class GraphRowControl : Control
 	{
 		if (_revisionRow is null)
 			return;
-
+		
 		var halfHeight = Bounds.Height / 2;
 
 		foreach (var conn in _revisionRow.ConnectionsRender)
@@ -52,6 +52,7 @@ public class GraphRowControl : Control
 			var pen = GetPen(conn.ColorId);
 			var baseX = LeftMargin + NodeInterval * conn.Index;
 			var targetX = baseX + conn.Delta * NodeInterval / 2;
+			var targetX2 = baseX + conn.Delta * NodeInterval;
 			
 			if (conn.Up)
 			{
@@ -69,6 +70,12 @@ public class GraphRowControl : Control
 									Point1 = new Point(baseX, halfHeight),
 									Point2 = new Point(baseX, halfHeight / 4),
 									Point3 = new Point(targetX, 0)
+								},
+								new BezierSegment
+								{
+									Point1 = new Point(targetX, 0),
+									Point2 = new Point(targetX2, -halfHeight / 4),
+									Point3 = new Point(targetX2, -halfHeight)
 								},
 							},
 							IsClosed = false,
@@ -93,6 +100,12 @@ public class GraphRowControl : Control
 									Point1 = new Point(baseX, halfHeight),
 									Point2 = new Point(baseX, Bounds.Height - halfHeight / 4),
 									Point3 = new Point(targetX, Bounds.Height)
+								},
+								new BezierSegment
+								{
+									Point1 = new Point(targetX, Bounds.Height),
+									Point2 = new Point(targetX2, Bounds.Height + halfHeight / 4),
+									Point3 = new Point(targetX2, Bounds.Height + halfHeight)
 								},
 							},
 							IsClosed = false,
