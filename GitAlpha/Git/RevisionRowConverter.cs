@@ -17,17 +17,14 @@ public static class RevisionRowConverter
 			})
 			.ToList();
 
-		var currentColorId = 0;
-		var colorMap = new Dictionary<ObjectId, int>();
-		
+		var colorMap = new ColorMap();
+
 		var first = result.FirstOrDefault();
 		if (first is not null)
 		{
 			first.Graph.NodeIndex = 0;
 			first.Render = new List<ObjectId>() { first.Id };
-			first.Graph.ColorId = currentColorId;
-			colorMap.Add(first.Id, currentColorId);
-			currentColorId++;
+			first.Graph.ColorId = colorMap.Map(first.Id);
 		}
 
 		foreach (var pair in result.Zip(result.Skip(1), (a, b) => new {a, b}))
@@ -37,20 +34,11 @@ public static class RevisionRowConverter
 
 			if (uRow.ParentIds.Count == 1)
 			{
-				var parentId = uRow.ParentIds[0];
-				if(!colorMap.ContainsKey(parentId))
-					colorMap.Add(parentId, uRow.Graph.ColorId);
+				colorMap.SetOneKnown(uRow.ParentIds[0], uRow.Graph.ColorId);
 			}
 			else
 			{
-				foreach (var parentId in uRow.ParentIds)
-				{
-					if (!colorMap.ContainsKey(parentId))
-					{
-						colorMap.Add(parentId, currentColorId);
-						currentColorId++;
-					}
-				}
+				colorMap.SetMany(uRow.ParentIds);
 			}
 			
 			var uNodeIndex = uRow.Render.IndexOf(uRow.Id); // always exists
@@ -78,16 +66,7 @@ public static class RevisionRowConverter
 
 			dRow.Graph.NodeIndex =  render.IndexOf(dRow.Id);
 			dRow.Render = render;
-			if (colorMap.TryGetValue(dRow.Id, out var existColorId))
-			{
-				dRow.Graph.ColorId = existColorId;
-			}
-			else
-			{
-				dRow.Graph.ColorId = currentColorId;
-				colorMap.Add(dRow.Id, currentColorId);
-				currentColorId++;
-			}
+			dRow.Graph.ColorId = colorMap.Map(dRow.Id);
 	
 			var connect = new List<NodeConnection>();
 
