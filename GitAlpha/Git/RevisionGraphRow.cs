@@ -7,6 +7,8 @@ public class RevisionGraphRow
 	public int NodeIndex { get; set; }
 
 	public int ColorId { get; set; }
+	
+	public int AllNodes { get; set; }
 
 	public List<Connections> ConnectionsRender { get; set; } = new List<Connections>();
 

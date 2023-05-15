@@ -66,6 +66,7 @@ public static class RevisionRowConverter
 
 			dRow.Graph.NodeIndex =  render.IndexOf(dRow.Id);
 			dRow.Render = render;
+			dRow.Graph.AllNodes = render.Count;
 			dRow.Graph.ColorId = colorMap.Map(dRow.Id);
 	
 			var connect = new List<NodeConnection>();

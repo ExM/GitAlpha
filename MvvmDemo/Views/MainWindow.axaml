@@ -10,35 +10,21 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="MvvmDemo">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel />
-    </Design.DataContext>
+	<Design.DataContext>
+		<vm:MainWindowViewModel />
+	</Design.DataContext>
 
-	<Grid>
-		<DataGrid Name="MyDataGrid" Items="{Binding Revisions}" AutoGenerateColumns="False"
-		          CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserSortColumns="False" 
-		          GridLinesVisibility="Vertical"
-		          VerticalScrollBarVisibility="Visible">
+	<TabControl>
+		<TabItem Header="DataGrid">
+			<controls:MyDemoControl DataContext="{Binding Revisions}" />
+		</TabItem>
+		<TabItem Header="List">
+			<controls:RevisionListControl DataContext="{Binding Revisions}" />
+		</TabItem>
+	</TabControl>
 
-			<DataGrid.Columns>
-				
-				<DataGridTemplateColumn Header="Node" IsReadOnly="True">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate DataType="git:RevisionRow">
-							<controls:GraphRowControl MinWidth="50" GraphRow = "{Binding Graph}"/>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
 
-				<!-- WTF reading a field resets the contents of the model -->
-				<!--DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True"/--> 
-				<DataGridTextColumn Header="Subject" Binding="{Binding Subject}" IsReadOnly="True"/>
-				<DataGridTextColumn Header="CommitDate" Binding="{Binding CommitDate}" IsReadOnly="True"  />
-			</DataGrid.Columns>
-		</DataGrid>
-	</Grid>
-	
-    <!--StackPanel Orientation="Vertical">
+	<!--StackPanel Orientation="Vertical">
         <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center" />
         <controls:GraphRowControl Width="100" Height="100" />
         

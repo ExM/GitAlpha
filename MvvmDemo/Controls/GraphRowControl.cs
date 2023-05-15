@@ -18,14 +18,24 @@ public class GraphRowControl : Control
 	{
 	}
 
-	public GraphRowControl()
+	public GraphRowControl(IServiceProvider sp)
 	{
 	}
 
 	public RevisionGraphRow? GraphRow
 	{
-		get => _revisionRow;
-		set => _revisionRow = value;
+		get
+		{
+			return _revisionRow;
+		}
+		set
+		{
+			_revisionRow = value;
+			if (_revisionRow != null)
+			{
+				Width = LeftMargin + _revisionRow.AllNodes * NodeInterval;
+			}
+		}
 	}
 
 	public static readonly DirectProperty<GraphRowControl, RevisionGraphRow?> GraphRowProperty =
@@ -39,13 +49,17 @@ public class GraphRowControl : Control
 	public int NodeInterval { get; set; } = 16;
 	
 	public double NodeSize { get; set; } = 5;
+	
+	public double? RenderHeight { get; set; }
 
 	public override void Render(DrawingContext drawingContext)
 	{
 		if (_revisionRow is null)
 			return;
+
+		var height = RenderHeight ?? Bounds.Height;
 		
-		var halfHeight = Bounds.Height / 2;
+		var halfHeight = height / 2;
 
 		foreach (var conn in _revisionRow.ConnectionsRender)
 		{
@@ -98,14 +112,14 @@ public class GraphRowControl : Control
 								new BezierSegment
 								{
 									Point1 = new Point(baseX, halfHeight),
-									Point2 = new Point(baseX, Bounds.Height - halfHeight / 4),
-									Point3 = new Point(targetX, Bounds.Height)
+									Point2 = new Point(baseX, height - halfHeight / 4),
+									Point3 = new Point(targetX, height)
 								},
 								new BezierSegment
 								{
-									Point1 = new Point(targetX, Bounds.Height),
-									Point2 = new Point(targetX2, Bounds.Height + halfHeight / 4),
-									Point3 = new Point(targetX2, Bounds.Height + halfHeight)
+									Point1 = new Point(targetX, height),
+									Point2 = new Point(targetX2, height + halfHeight / 4),
+									Point3 = new Point(targetX2, height + halfHeight)
 								},
 							},
 							IsClosed = false,

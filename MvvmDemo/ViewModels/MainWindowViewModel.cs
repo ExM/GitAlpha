@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using GitAlpha.Extensions;
 using GitAlpha.Git;
+using MvvmDemo.Models;
 using ReactiveUI;
 
 namespace MvvmDemo.ViewModels;
@@ -35,10 +36,10 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
 		var repo = new Repository(new DirectoryInfo(path));
 
-		Revisions = repo.GetRevisions().ToRevisionRow();
+		Revisions = new RevisionRowCollection(repo.GetRevisions().ToRevisionRow());
 	}
 
-	public IList<RevisionRow> Revisions { get; }
+	public RevisionRowCollection Revisions { get; }
 
 	private void OnTimer(object? state)
 	{

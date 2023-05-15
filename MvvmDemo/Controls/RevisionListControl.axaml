@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:git="clr-namespace:GitAlpha.Git;assembly=GitAlpha"
+             xmlns:controls="clr-namespace:MvvmDemo.Controls"
+             xmlns:models="clr-namespace:MvvmDemo.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MvvmDemo.Controls.RevisionListControl">
+	
+	<Design.DataContext>
+		<models:RevisionRowCollection/>
+	</Design.DataContext>
+	
+	<ListBox Items="{Binding}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+		<ListBox.ItemTemplate>
+			<DataTemplate>
+				<DockPanel>
+					<controls:GraphRowControl MinWidth="50" RenderHeight="19" GraphRow = "{Binding Graph}" DockPanel.Dock="Left"/>
+					<TextBlock Text="{Binding CommitDate}" DockPanel.Dock="Right"/>
+					<TextBlock Text="{Binding Subject}" TextWrapping="Wrap" DockPanel.Dock="Right"/>
+				</DockPanel>
+			</DataTemplate>
+		</ListBox.ItemTemplate>
+	</ListBox>
+	
+</UserControl>

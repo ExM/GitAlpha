@@ -1,0 +1,20 @@
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using GitAlpha.Git;
+
+namespace MvvmDemo.Models;
+
+public class RevisionRowCollection: ObservableCollection<RevisionRow>
+{
+	public RevisionRowCollection(): base()
+	{
+	}
+	
+	public RevisionRowCollection(IEnumerable<RevisionRow> collection) : base(collection)
+	{
+	}
+
+	public RevisionRowCollection(List<RevisionRow> list) : base(list)
+	{
+	}
+}
