@@ -43,6 +43,12 @@ public class GraphRowControl : Control
 			nameof(RevisionRow),
 			o => o.GraphRow,
 			(o, v) => o.GraphRow = v);
+	
+	public static readonly DirectProperty<GraphRowControl, double?> RenderHeightProperty =
+		AvaloniaProperty.RegisterDirect<GraphRowControl, double?>(
+			nameof(RenderHeight),
+			o => o.RenderHeight,
+			(o, v) => o.RenderHeight = v);
 
 	public int LeftMargin { get; set; } = 8;
 	

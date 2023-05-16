@@ -22,7 +22,7 @@
 			<DataGridTemplateColumn Header="Node" IsReadOnly="True">
 				<DataGridTemplateColumn.CellTemplate>
 					<DataTemplate DataType="git:RevisionRow">
-						<controls:GraphRowControl MinWidth="50" GraphRow = "{Binding Graph}"/>
+						<controls:GraphRowControl MinWidth="50" GraphRow = "{Binding Graph}" HorizontalAlignment="Left"/>
 					</DataTemplate>
 				</DataGridTemplateColumn.CellTemplate>
 			</DataGridTemplateColumn>
