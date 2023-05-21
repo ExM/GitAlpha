@@ -5,6 +5,7 @@
              xmlns:git="clr-namespace:GitAlpha.Git;assembly=GitAlpha"
              xmlns:controls="clr-namespace:MvvmDemo.Controls"
              xmlns:models="clr-namespace:MvvmDemo.Models"
+             xmlns:mvvmDemo="clr-namespace:MvvmDemo"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="MvvmDemo.Controls.RevisionListControl">
 	
@@ -12,13 +13,20 @@
 		<models:RevisionRowCollection/>
 	</Design.DataContext>
 	
+	<UserControl.Resources>
+		<mvvmDemo:ObjectIdRenderer x:Key="ObjectIdRenderer"/>
+	</UserControl.Resources>
+
+	
 	<ListBox Items="{Binding}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 		<ListBox.ItemTemplate>
 			<DataTemplate>
 				<DockPanel>
 					<controls:GraphRowControl MinWidth="50" RenderHeight="{Binding $parent[ListBoxItem].Bounds.Height}" GraphRow = "{Binding Graph}" DockPanel.Dock="Left"/>
-					<TextBlock Text="{Binding CommitDate}" DockPanel.Dock="Right"/>
-					<TextBlock Text="{Binding Subject}" TextWrapping="Wrap" DockPanel.Dock="Right"/>
+					<TextBlock Text="{Binding Id, Converter={StaticResource ObjectIdRenderer}, ConverterParameter=8}"
+					           Padding="4,0,0,0" TextWrapping="NoWrap" FontFamily="Consolas, Monospace" DockPanel.Dock="Right" ToolTip.Tip="{Binding Id}"/>
+					<TextBlock Text="{Binding CommitDate}" Padding="4,0,0,0" FontFamily="Consolas, Monospace" DockPanel.Dock="Right"/>
+					<TextBlock Text="{Binding Subject}" TextWrapping="Wrap"  DockPanel.Dock="Right"/>
 				</DockPanel>
 			</DataTemplate>
 		</ListBox.ItemTemplate>
