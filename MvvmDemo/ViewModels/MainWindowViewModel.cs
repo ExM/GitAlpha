@@ -4,9 +4,9 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using GitAlpha.Avalonia.ViewModels;
 using GitAlpha.Extensions;
 using GitAlpha.Git;
-using MvvmDemo.Models;
 using ReactiveUI;
 
 namespace MvvmDemo.ViewModels;

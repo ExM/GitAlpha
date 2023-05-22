@@ -1,8 +1,4 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
-
-namespace GitAlpha.Git
+﻿namespace GitAlpha.Git
 {
 	public sealed class RevisionRow
 	{

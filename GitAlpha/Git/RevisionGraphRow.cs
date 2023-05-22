@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace GitAlpha.Git;
 
 public class RevisionGraphRow

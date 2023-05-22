@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using GitAlpha.Git;
 
-namespace MvvmDemo.Controls;
+namespace GitAlpha.Avalonia.Controls;
 
 public class GraphRowControl : Control
 {

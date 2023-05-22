@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using GitAlpha.Git;
 
-namespace MvvmDemo.Models;
+namespace GitAlpha.Avalonia.ViewModels;
 
 public class RevisionRowCollection: ObservableCollection<RevisionRow>
 {

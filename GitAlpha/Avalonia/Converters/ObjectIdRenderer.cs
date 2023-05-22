@@ -1,24 +1,36 @@
-using System;
 using System.Globalization;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using GitAlpha.Git;
 
-namespace MvvmDemo;
+namespace GitAlpha.Avalonia.Converters;
 
 public class ObjectIdRenderer: IValueConverter
 {
-	public static readonly ObjectIdRenderer Instance = new();
+	private int _length = 4;
+
+	public int Length
+	{
+		get => _length;
+		set
+		{
+			if (value < 1)
+				value = 1;
+			if (value > ObjectId.Sha1CharCount)
+				value = ObjectId.Sha1CharCount;
+			
+			_length = value;
+		}
+	}
+	
+	public string Render(ObjectId id) => id.ToShortString(_length);
 
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
-		//return value?.ToString() + " " + parameter?.ToString();
-
 		if (value is ObjectId id &&
-		    parameter is string targetSize &&
 		    targetType.IsAssignableTo(typeof(string)))
 		{
-			return id.ToShortString(int.Parse(targetSize));
+			return Render(id);
 		}
 		
 		return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
