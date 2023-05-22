@@ -5,11 +5,13 @@
              xmlns:git="clr-namespace:GitAlpha.Git;assembly=GitAlpha"
              xmlns:controls="clr-namespace:MvvmDemo.Controls"
              xmlns:models="clr-namespace:MvvmDemo.Models"
+             xmlns:models1="clr-namespace:MvvmDemo.Models;assembly=GitAlpha"
+             xmlns:controls1="clr-namespace:MvvmDemo.Controls;assembly=GitAlpha"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="MvvmDemo.Controls.MyDemoControl">
 	
 	<Design.DataContext>
-		<models:RevisionRowCollection/>
+		<models1:RevisionRowCollection/>
 	</Design.DataContext>
 	
 	<DataGrid Name="MyDataGrid" Items="{Binding}" AutoGenerateColumns="False"
@@ -22,7 +24,7 @@
 			<DataGridTemplateColumn Header="Node" IsReadOnly="True">
 				<DataGridTemplateColumn.CellTemplate>
 					<DataTemplate DataType="git:RevisionRow">
-						<controls:GraphRowControl MinWidth="50" GraphRow = "{Binding Graph}" HorizontalAlignment="Left"/>
+						<controls1:GraphRowControl MinWidth="50" GraphRow = "{Binding Graph}" HorizontalAlignment="Left"/>
 					</DataTemplate>
 				</DataGridTemplateColumn.CellTemplate>
 			</DataGridTemplateColumn>

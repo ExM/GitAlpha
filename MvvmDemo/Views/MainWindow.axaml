@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:MvvmDemo.Controls"
         xmlns:git="clr-namespace:GitAlpha.Git;assembly=GitAlpha"
+        xmlns:controls1="clr-namespace:MvvmDemo.Controls;assembly=GitAlpha"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MvvmDemo.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -19,7 +20,7 @@
 			<controls:MyDemoControl DataContext="{Binding Revisions}" />
 		</TabItem>
 		<TabItem Header="List">
-			<controls:RevisionListControl DataContext="{Binding Revisions}" />
+			<controls1:RevisionListControl DataContext="{Binding Revisions}" />
 		</TabItem>
 	</TabControl>
 

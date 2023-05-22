@@ -6,7 +6,6 @@
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
     <None Remove="Styles\Common.xaml" />
     <AvaloniaResource Include="Styles\Common.xaml" />
@@ -32,10 +31,6 @@
 	  </Compile>
 	  <Compile Update="Controls\MyDemoControl.axaml.cs">
 	    <DependentUpon>MyDemoControl.axaml</DependentUpon>
-	    <SubType>Code</SubType>
-	  </Compile>
-	  <Compile Update="Controls\RevisionListControl.axaml.cs">
-	    <DependentUpon>RevisionListControl.axaml</DependentUpon>
 	    <SubType>Code</SubType>
 	  </Compile>
 	</ItemGroup>	
