@@ -4,9 +4,14 @@
 
 	  <!-- Default styles for elements -->
    
-    <Style Selector="DataGrid">
-        <Setter Property="RowHeight" Value="26" />
+    <Style Selector="ListBoxItem">
+        <!--Setter Property="Padding" Value="30,30,30,30" /-->
     </Style>
+	  
+	  <Style Selector="DataGrid">
+		  <Setter Property="RowHeight" Value="26" />
+	  </Style>
+	  
 	  <Style Selector="DataGridCell">
 		  <!--Setter Property="Height" Value="26" /-->
 		  <Setter Property="MinHeight" Value="10" />

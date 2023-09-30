@@ -17,11 +17,11 @@
 		
 	</UserControl.Resources>
 	
-	<ListBox Name="ListBox" Items="{Binding}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+	<ListBox Name="RootListBox" ItemsSource="{Binding}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 		<ListBox.ItemTemplate>
 			<DataTemplate>
 				<DockPanel>
-					<controls:GraphRowControl MinWidth="50" RenderHeight="{Binding $parent[ListBoxItem].Bounds.Height}" GraphRow = "{Binding Graph}" DockPanel.Dock="Left"/>
+					<controls:GraphRowControl MinWidth="50" GraphRow = "{Binding Graph}" DockPanel.Dock="Left"/>
 					<TextBlock Name="IdView" Text="{Binding Id, Converter={StaticResource ObjectIdRenderer}}"
 					           Padding="4,0,0,0" TextWrapping="NoWrap" FontFamily="Consolas, Monospace" DockPanel.Dock="Right" ToolTip.Tip="{Binding Id}" />
 

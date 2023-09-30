@@ -29,7 +29,7 @@ public partial class RevisionListControl : UserControl
 		{
 			_objectIdRenderer.Length = value;
 
-			foreach (var idView in ListBox.GetLogicalDescendants().OfType<TextBlock>().Where(tb => tb.Name == "IdView"))
+			foreach (var idView in RootListBox.GetLogicalDescendants().OfType<TextBlock>().Where(tb => tb.Name == "IdView"))
 			{
 				if(idView.DataContext is RevisionRow row)
 					idView.Text = _objectIdRenderer.Render(row.Id);

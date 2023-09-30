@@ -4,6 +4,9 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <OutputType>WinExe</OutputType>
+		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<!--AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault-->
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
@@ -21,7 +24,7 @@
 		<PackageReference Include="Avalonia.Desktop" />
 		<PackageReference Include="Avalonia.Diagnostics" />
 		<PackageReference Include="Avalonia.ReactiveUI" />
-		<PackageReference Include="XamlNameReferenceGenerator" />
+		<PackageReference Include="Avalonia.Themes.Fluent" />
 	</ItemGroup>
 
 	<ItemGroup>

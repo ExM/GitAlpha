@@ -15,7 +15,6 @@
 		<PackageReference Include="Avalonia" />
 		<PackageReference Include="Avalonia.Desktop" />
 		<PackageReference Include="Avalonia.ReactiveUI" />
-		<PackageReference Include="XamlNameReferenceGenerator" />
 	</ItemGroup>
 	
   <ItemGroup>

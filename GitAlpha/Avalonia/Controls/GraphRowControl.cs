@@ -33,27 +33,24 @@ public class GraphRowControl : Control
 			nameof(RevisionRow),
 			o => o.GraphRow,
 			(o, v) => o.GraphRow = v);
-	
-	public static readonly DirectProperty<GraphRowControl, double?> RenderHeightProperty =
-		AvaloniaProperty.RegisterDirect<GraphRowControl, double?>(
-			nameof(RenderHeight),
-			o => o.RenderHeight,
-			(o, v) => o.RenderHeight = v);
 
 	public int LeftMargin { get; set; } = 8;
 	
 	public int NodeInterval { get; set; } = 16;
 	
 	public double NodeSize { get; set; } = 5;
-	
-	public double? RenderHeight { get; set; }
 
 	public override void Render(DrawingContext drawingContext)
 	{
 		if (_revisionRow is null)
 			return;
 
-		var height = RenderHeight ?? Bounds.Height;
+		var panel = (DockPanel)Parent!;
+		var listBoxItem = (ListBoxItem)panel.Parent!;
+
+		var yShift = - (panel.Margin.Bottom + listBoxItem.Margin.Bottom + listBoxItem.Padding.Bottom);
+		var height = listBoxItem.Bounds.Height;
+		
 		
 		var halfHeight = height / 2;
 
@@ -72,20 +69,20 @@ public class GraphRowControl : Control
 					{
 						new PathFigure
 						{
-							StartPoint = new Point(baseX, halfHeight),
+							StartPoint = new Point(baseX, halfHeight + yShift),
 							Segments = new PathSegments()
 							{
 								new BezierSegment
 								{
-									Point1 = new Point(baseX, halfHeight),
-									Point2 = new Point(baseX, halfHeight / 4),
-									Point3 = new Point(targetX, 0)
+									Point1 = new Point(baseX, halfHeight + yShift),
+									Point2 = new Point(baseX, halfHeight / 4 + yShift),
+									Point3 = new Point(targetX, 0 + yShift)
 								},
 								new BezierSegment
 								{
-									Point1 = new Point(targetX, 0),
-									Point2 = new Point(targetX2, -halfHeight / 4),
-									Point3 = new Point(targetX2, -halfHeight)
+									Point1 = new Point(targetX, 0 + yShift),
+									Point2 = new Point(targetX2, -halfHeight / 4 + yShift),
+									Point3 = new Point(targetX2, -halfHeight + yShift)
 								},
 							},
 							IsClosed = false,
@@ -102,20 +99,20 @@ public class GraphRowControl : Control
 					{
 						new PathFigure
 						{
-							StartPoint = new Point(baseX, halfHeight),
+							StartPoint = new Point(baseX, halfHeight + yShift),
 							Segments = new PathSegments()
 							{
 								new BezierSegment
 								{
-									Point1 = new Point(baseX, halfHeight),
-									Point2 = new Point(baseX, height - halfHeight / 4),
-									Point3 = new Point(targetX, height)
+									Point1 = new Point(baseX, halfHeight + yShift),
+									Point2 = new Point(baseX, height - halfHeight / 4 + yShift),
+									Point3 = new Point(targetX, height + yShift)
 								},
 								new BezierSegment
 								{
-									Point1 = new Point(targetX, height),
-									Point2 = new Point(targetX2, height + halfHeight / 4),
-									Point3 = new Point(targetX2, height + halfHeight)
+									Point1 = new Point(targetX, height + yShift),
+									Point2 = new Point(targetX2, height + halfHeight / 4 + yShift),
+									Point3 = new Point(targetX2, height + halfHeight + yShift)
 								},
 							},
 							IsClosed = false,
@@ -129,7 +126,7 @@ public class GraphRowControl : Control
 		var nodeBrush = GetBrush(_revisionRow.ColorId);
 		
 		drawingContext.DrawEllipse(nodeBrush, null, new Point(
-			LeftMargin + _revisionRow.NodeIndex * NodeInterval, halfHeight), NodeSize, NodeSize);
+			LeftMargin + _revisionRow.NodeIndex * NodeInterval, halfHeight + yShift), NodeSize, NodeSize);
 	}
 	
 	private static ISolidColorBrush GetBrush(int colorId)
