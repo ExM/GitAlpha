@@ -24,7 +24,7 @@
 		<PackageReference Include="Avalonia.Desktop" />
 		<PackageReference Include="Avalonia.Diagnostics" />
 		<PackageReference Include="Avalonia.ReactiveUI" />
-		<PackageReference Include="Avalonia.Themes.Fluent" />
+		<PackageReference Include="Semi.Avalonia" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -32,10 +32,5 @@
 	    <DependentUpon>DefaultTheme.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>	
-	
-	<ImportGroup>
 
-	</ImportGroup>
-	
-  <!--Import Project="..\.paket\Paket.Restore.targets" /-->
 </Project>
