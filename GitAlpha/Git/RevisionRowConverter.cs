@@ -32,6 +32,9 @@ public static class RevisionRowConverter
 			var uRow = pair.a;
 			var dRow = pair.b;
 
+			uRow.Graph.Down = dRow.Graph;
+			dRow.Graph.Up = uRow.Graph;
+
 			if (uRow.ParentIds.Count == 1)
 			{
 				colorMap.SetOneKnown(uRow.ParentIds[0], uRow.Graph.ColorId);

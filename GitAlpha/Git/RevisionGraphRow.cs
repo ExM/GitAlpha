@@ -1,3 +1,5 @@
+using GitAlpha.Avalonia.Controls;
+
 namespace GitAlpha.Git;
 
 public class RevisionGraphRow
@@ -17,4 +19,9 @@ public class RevisionGraphRow
 		public bool Up { get; init; }
 		public int ColorId { get; init; }
 	}
+
+	public RevisionGraphRow? Up { get; set; }
+	public RevisionGraphRow? Down { get; set; }
+	
+	public GraphRowControl? BindControl { get; set; }
 }

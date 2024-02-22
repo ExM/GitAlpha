@@ -20,9 +20,18 @@ public class GraphRowControl : Control
 		}
 		set
 		{
-			_revisionRow = value;
-			if (_revisionRow != null)
+			_renderGeometryResolved = false;
+			
+			if (_revisionRow is not null)
 			{
+				_revisionRow.BindControl = null;
+			}
+			
+			_revisionRow = value;
+
+			if (_revisionRow is not null)
+			{
+				_revisionRow.BindControl = this;
 				Width = LeftMargin + _revisionRow.AllNodes * NodeInterval;
 			}
 		}
@@ -40,20 +49,54 @@ public class GraphRowControl : Control
 	
 	public double NodeSize { get; set; } = 5;
 
+	public double RenderHeight
+	{
+		get
+		{
+			ResolveRenderGeometryWithParent();
+			return _renderHeight;
+		}
+	}
+
+	private bool _renderGeometryResolved = false;
+
+	private double _renderHeight;
+	private double _renderYShift;
+	
+	private void ResolveRenderGeometryWithParent()
+	{
+		if(_renderGeometryResolved)
+			return;
+		
+		var panel = (DockPanel)Parent!;
+		var listBoxItem = (ListBoxItem)panel.Parent!;
+
+		_renderYShift = - (panel.Margin.Bottom + listBoxItem.Margin.Bottom + listBoxItem.Padding.Bottom);
+		_renderHeight = listBoxItem.Bounds.Height;
+
+		_renderGeometryResolved = true;
+	}
+
+	protected override void OnSizeChanged(SizeChangedEventArgs e)
+	{
+		_renderGeometryResolved = false;
+		_revisionRow?.Up?.BindControl?.InvalidateVisual();
+		_revisionRow?.Down?.BindControl?.InvalidateVisual();
+		base.OnSizeChanged(e);
+	}
+
 	public override void Render(DrawingContext drawingContext)
 	{
 		if (_revisionRow is null)
 			return;
-
-		var panel = (DockPanel)Parent!;
-		var listBoxItem = (ListBoxItem)panel.Parent!;
-
-		var yShift = - (panel.Margin.Bottom + listBoxItem.Margin.Bottom + listBoxItem.Padding.Bottom);
-		var height = listBoxItem.Bounds.Height;
 		
-		
-		var halfHeight = height / 2;
+		ResolveRenderGeometryWithParent();
+		var yShift = _renderYShift;
+		var height = _renderHeight;
 
+		var upHeight = _revisionRow.Up?.BindControl?.RenderHeight ?? height;
+		var downHeight = _revisionRow.Down?.BindControl?.RenderHeight ?? height;
+		
 		foreach (var conn in _revisionRow.ConnectionsRender)
 		{
 			var pen = GetPen(conn.ColorId);
@@ -63,26 +106,28 @@ public class GraphRowControl : Control
 			
 			if (conn.Up)
 			{
+				var middleHeight = Math.Min(height, upHeight) / 2 / 4;
+				
 				drawingContext.DrawGeometry(null, pen, new PathGeometry
 				{
 					Figures = new PathFigures
 					{
 						new PathFigure
 						{
-							StartPoint = new Point(baseX, halfHeight + yShift),
+							StartPoint = new Point(baseX, height / 2 + yShift),
 							Segments = new PathSegments()
 							{
 								new BezierSegment
 								{
-									Point1 = new Point(baseX, halfHeight + yShift),
-									Point2 = new Point(baseX, halfHeight / 4 + yShift),
+									Point1 = new Point(baseX, height / 2 + yShift),
+									Point2 = new Point(baseX, middleHeight + yShift),
 									Point3 = new Point(targetX, 0 + yShift)
 								},
 								new BezierSegment
 								{
 									Point1 = new Point(targetX, 0 + yShift),
-									Point2 = new Point(targetX2, -halfHeight / 4 + yShift),
-									Point3 = new Point(targetX2, -halfHeight + yShift)
+									Point2 = new Point(targetX2, - middleHeight + yShift),
+									Point3 = new Point(targetX2, - upHeight / 2 + yShift)
 								},
 							},
 							IsClosed = false,
@@ -93,26 +138,28 @@ public class GraphRowControl : Control
 			}
 			else
 			{
+				var middleHeight = Math.Min(height, downHeight) / 2 / 4;
+				
 				drawingContext.DrawGeometry(null, pen, new PathGeometry
 				{
 					Figures = new PathFigures
 					{
 						new PathFigure
 						{
-							StartPoint = new Point(baseX, halfHeight + yShift),
+							StartPoint = new Point(baseX, height / 2 + yShift),
 							Segments = new PathSegments()
 							{
 								new BezierSegment
 								{
-									Point1 = new Point(baseX, halfHeight + yShift),
-									Point2 = new Point(baseX, height - halfHeight / 4 + yShift),
+									Point1 = new Point(baseX, height / 2 + yShift),
+									Point2 = new Point(baseX, height - middleHeight + yShift),
 									Point3 = new Point(targetX, height + yShift)
 								},
 								new BezierSegment
 								{
 									Point1 = new Point(targetX, height + yShift),
-									Point2 = new Point(targetX2, height + halfHeight / 4 + yShift),
-									Point3 = new Point(targetX2, height + halfHeight + yShift)
+									Point2 = new Point(targetX2, height + middleHeight + yShift),
+									Point3 = new Point(targetX2, height + downHeight / 2 + yShift)
 								},
 							},
 							IsClosed = false,
@@ -126,7 +173,7 @@ public class GraphRowControl : Control
 		var nodeBrush = GetBrush(_revisionRow.ColorId);
 		
 		drawingContext.DrawEllipse(nodeBrush, null, new Point(
-			LeftMargin + _revisionRow.NodeIndex * NodeInterval, halfHeight + yShift), NodeSize, NodeSize);
+			LeftMargin + _revisionRow.NodeIndex * NodeInterval, height / 2 + yShift), NodeSize, NodeSize);
 	}
 	
 	private static ISolidColorBrush GetBrush(int colorId)
@@ -151,10 +198,10 @@ public class GraphRowControl : Control
 	};
 	
 	private static readonly IList<ISolidColorBrush> _brushes =
-		_colorPreset.Select(color => (ISolidColorBrush)new ImmutableSolidColorBrush(color)).ToList();
+		_colorPreset.Select(color => (ISolidColorBrush)new ImmutableSolidColorBrush(color, 1d)).ToList();
 
 	private static readonly IList<Pen> _pens =
-		_brushes.Select(brush => new Pen(brush, 2, null, PenLineCap.Round)).ToList();
+		_brushes.Select(brush => new Pen(brush, 2, null, PenLineCap.Flat)).ToList();
 
 	private RevisionGraphRow? _revisionRow;
 }

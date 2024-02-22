@@ -17,7 +17,7 @@
 		
 	</UserControl.Resources>
 	
-	<ListBox Name="RootListBox" ItemsSource="{Binding}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+	<ListBox Name="RootListBox" ItemsSource="{Binding}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" UseLayoutRounding="False">
 		<ListBox.ItemTemplate>
 			<DataTemplate>
 				<DockPanel>
