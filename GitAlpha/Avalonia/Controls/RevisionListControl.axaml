@@ -23,9 +23,9 @@
 				<DockPanel>
 					<controls:GraphRowControl MinWidth="50" GraphRow = "{Binding Graph}" DockPanel.Dock="Left"/>
 					<TextBlock Name="IdView" Text="{Binding Id, Converter={StaticResource ObjectIdRenderer}}"
-					           Padding="4,0,0,0" TextWrapping="NoWrap" FontFamily="Consolas, Monospace" DockPanel.Dock="Right" ToolTip.Tip="{Binding Id}" />
+					           Padding="4,0,0,0" TextWrapping="NoWrap" FontFamily="Monospace" DockPanel.Dock="Right" ToolTip.Tip="{Binding Id}" />
 
-					<TextBlock Text="{Binding CommitDate}" Padding="4,0,0,0" FontFamily="Consolas, Monospace" DockPanel.Dock="Right"/>
+					<TextBlock Text="{Binding CommitDate}" Padding="4,0,0,0" DockPanel.Dock="Right"/>
 					<TextBlock Text="{Binding Subject}" TextWrapping="Wrap"  DockPanel.Dock="Right"/>
 				</DockPanel>
 			</DataTemplate>

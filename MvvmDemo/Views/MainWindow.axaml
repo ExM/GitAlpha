@@ -22,6 +22,18 @@
 				<gitControls:RevisionListControl Name="RevisionListControl" DataContext="{Binding Revisions}" />
 			</DockPanel>
 		</TabItem>
+		<TabItem Header="Fonts">
+			<ListBox ItemsSource="{Binding InstalledFonts}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<DockPanel>
+							<TextBlock Text="{Binding Name}" TextWrapping="NoWrap"  DockPanel.Dock="Left"/>
+							<TextBlock Text="Hello world!!! 123" TextWrapping="NoWrap" FontFamily="{Binding}" DockPanel.Dock="Left"/>
+						</DockPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</TabItem>
 	</TabControl>
 
 
